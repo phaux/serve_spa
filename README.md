@@ -1,10 +1,19 @@
 # Serve SPA
 
+[![deno doc](https://doc.deno.land/badge.svg)](https://deno.land/x/serve_spa)
+
 Make frontend apps with Deno.
+
+## Features
+
+- Compiles TypeScript and JSX on the fly.
+- Injects your Deno importMap into HTML files.
 
 ## Example
 
 ```ts
+import { serveSpa } from "https://deno.land/x/serve_spa/mod.ts";
+
 Deno.serve({ port }, async (request) => {
   return await serveSpa(request, {
     fsRoot: "./web",
