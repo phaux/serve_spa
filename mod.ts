@@ -28,7 +28,7 @@ if (import.meta.main) {
     const options: ServeSpaOptions = {
       fsRoot,
       enableCors: flags.cors,
-      quiet: flags.quiet,
+      log: !flags.quiet,
       aliasMap: Object.fromEntries(
         flags.alias.map((alias) => alias.split("=", 2)),
       ),
@@ -39,7 +39,7 @@ if (import.meta.main) {
       { port },
       (request) => serveSpa(request, options),
     );
-    if (!options.quiet) {
+    if (!flags.quiet) {
       console.log(`Serving SPA on http://localhost:${port}`);
     }
     await server.finished;
@@ -60,9 +60,9 @@ export interface ServeSpaOptions {
   enableCors?: boolean;
 
   /**
-   * Do not print request level logs.
+   * Whether to log requests to stdout.
    */
-  quiet?: boolean;
+  log?: boolean | ((request: Request, response: Response) => boolean);
 
   /**
    * Map of additional URL paths to FS paths.
@@ -131,7 +131,11 @@ export async function serveSpa(
     );
   }
 
-  if (!options.quiet) {
+  if (
+    options.log instanceof Function
+      ? options.log(request, response)
+      : options.log
+  ) {
     console.log(`${request.method} ${request.url} - ${response.status}`);
   }
 
