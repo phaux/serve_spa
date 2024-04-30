@@ -4,12 +4,64 @@
 
 Make frontend apps with Deno.
 
-## Features
+## SYNOPSIS
 
-- Compiles TypeScript and JSX on the fly.
-- Injects your Deno importMap into HTML files.
+```sh
+deno run https://deno.land/x/serve_spa/main.ts [OPTION]... [ROOT]
+```
 
-## Example
+## DESCRIPTION
+
+Serves files in ROOT if specified, otherwise current directory. Compiles
+TypeScript and JSX on the fly.
+
+## OPTIONS
+
+- `-q`, `--quiet`
+
+  Suppress logging.
+
+- `-p`, `--port PORT`
+
+  Port to listen on. Default is 8123.
+
+- `--index-fallback`
+
+  Render root `index.html` at every extension-less path that doesn't match a
+  file or directory.
+
+- `--import-map-file IMPORT_MAP_FILE`
+
+  Inject import map JSON file into HTML files. Use this to use your Deno import
+  map in the browser.
+
+- `--alias-path URL_PATH=FS_PATH`
+
+  Rewrite URL_PATH to FS_PATH.
+
+- `--cors`
+
+  Enable CORS.
+
+- `--jsx MODE`
+
+  Enable JSX transformation. Available modes are "classic" and "automatic".
+
+- `--jsx-import-source IMPORT_SOURCE`
+
+  Set the import source when JSX mode is "automatic".
+
+- `--jsx-factory FACTORY`
+
+  Set the JSX factory when JSX mode is "classic".
+
+- `--jsx-fragment-factory FACTORY`
+
+  Set the JSX fragment factory when JSX mode is "classic".
+
+## JS API
+
+Example:
 
 ```ts
 import { serveSpa } from "https://deno.land/x/serve_spa/mod.ts";
@@ -18,51 +70,11 @@ Deno.serve({ port }, async (request) => {
   return await serveSpa(request, {
     fsRoot: "./web",
     indexFallback: true,
-    alias: {
+    pathAliasMap: {
       "/favicon.png": "../logo.png",
       "/utils/*": "../utils/",
     },
-    importMapFile: "./deno.json",
+    importMapFile: "../deno.json",
   });
 });
-```
-
-## Use as a command
-
-```man
-serve_spa - Make frontend apps with Deno
-
-USAGE:
-  deno run -A https://deno.land/x/serve_spa/mod.ts [OPTIONS] [<fsRoot>]
-
-OPTIONS:
-  <fsRoot>
-    Root directory to serve files from. Default is the current directory.
-
-  -h, --help
-    Prints help.
-
-  -p, --port <port>
-    Port to listen on. Default is 8123.
-
-  --cors
-    Enable CORS via the "Access-Control-Allow-Origin" header.
-
-  --quiet
-    Suppress log messages from output.
-
-  --index-fallback
-    Fallback to /index.html when a file is not found.
-
-  --alias <urlPath=fsPath>
-    Map a URL path to a filesystem path. 
-    urlPath must begin with a slash (/).
-    urlPath can end with a star (*) to match all sub paths.
-    fsPath should be relative to the fsRoot.
-    Can be used multiple times.
-
-  --import-map-file <path>
-    Path to import map file.
-    When specified, injects the import map into every HTML file.
-    Use this to use your Deno import maps in the browser.
 ```
