@@ -12,8 +12,9 @@ deno run https://deno.land/x/serve_spa/main.ts [OPTION]... [ROOT]
 
 ## DESCRIPTION
 
-Serves files in ROOT if specified, otherwise current directory. Compiles
-TypeScript and JSX on the fly.
+Spins up a dev server for single-page applications (SPA). Serves static files
+from `ROOT` or current directory if not specified. Compiles TypeScript on the
+fly.
 
 ## OPTIONS
 
@@ -35,7 +36,7 @@ TypeScript and JSX on the fly.
   Inject import map JSON file into HTML files. Use this to use your Deno import
   map in the browser.
 
-- `--alias-path URL_PATH=FS_PATH`
+- `--path-alias URL_PATH=FS_PATH`
 
   Rewrite URL_PATH to FS_PATH.
 

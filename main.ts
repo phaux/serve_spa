@@ -1,13 +1,6 @@
 import { parse } from "https://deno.land/std@0.203.0/flags/mod.ts";
 import { bold, underline } from "https://deno.land/std@0.222.1/fmt/colors.ts";
-import * as v from "jsr:@badrap/valita";
 import { serveSpa, ServeSpaOptions } from "./mod.ts";
-
-const jsxModes = v.union(
-  v.literal("classic"),
-  v.literal("automatic"),
-  v.undefined(),
-);
 
 // deno-fmt-ignore
 const helpText = `
@@ -18,8 +11,9 @@ ${bold(`SYNOPSIS`)}
   ${bold(`deno`)} run ${bold(`https://deno.land/x/serve_spa/main.ts`)} [${underline(`OPTION`)}]... [${underline(`ROOT`)}]
 
 ${bold(`DESCRIPTION`)}
-  Serves files in ${underline(`ROOT`)} if specified, otherwise current directory.
-  Compiles TypeScript and JSX on the fly.
+  Spins up a dev server for single-page applications (SPA).
+  Serves static files from ${underline(`ROOT`)} or current directory if not specified.
+  Compiles TypeScript on the fly.
 
 ${bold(`OPTIONS`)}
   ${bold(`-h`)}, ${bold(`--help`)}
@@ -40,7 +34,7 @@ ${bold(`OPTIONS`)}
     Use this to use your Deno import map in the browser.
     Should be relative to ${underline(`ROOT`)}.
 
-  ${bold(`--alias-path`)} ${underline(`URL_PATH`)}=${underline(`FS_PATH`)}
+  ${bold(`--path-alias`)} ${underline(`URL_PATH`)}=${underline(`FS_PATH`)}
     Rewrite ${underline(`URL_PATH`)} to ${underline(`FS_PATH`)}.
     ${underline(`URL_PATH`)} must begin with \`/\`, otherwise it won't match.
     If ${underline(`URL_PATH`)} ends with \`*\`, then only the prefix is matched and replaced.
@@ -75,7 +69,7 @@ if (import.meta.main) {
     ],
     string: [
       "port",
-      "alias-path",
+      "path-alias",
       "import-map-file",
       "jsx",
       "jsx-import-source",
@@ -83,12 +77,11 @@ if (import.meta.main) {
       "jsx-fragment-factory",
     ],
     collect: [
-      "alias-path",
+      "path-alias",
     ],
     alias: {
       "help": "h",
       "port": "p",
-      "alias-path": "alias",
     },
   });
 
@@ -97,16 +90,17 @@ if (import.meta.main) {
   } else {
     const port = Number(flags.port) || 8123;
     const fsRoot = flags._[0] ? String(flags._[0]) : undefined;
+
     const options: ServeSpaOptions = {
       fsRoot,
       enableCors: flags.cors,
       log: !flags.quiet,
       pathAliasMap: Object.fromEntries(
-        flags["alias-path"].map((alias) => alias.split("=", 2)),
+        flags["path-alias"].map((alias) => alias.split("=", 2)),
       ),
       importMapFile: flags["import-map-file"],
       indexFallback: flags["index-fallback"],
-      jsx: jsxModes.parse(flags.jsx),
+      jsx: flags.jsx as ServeSpaOptions["jsx"],
       jsxImportSource: flags["jsx-import-source"],
       jsxFactory: flags["jsx-factory"],
       jsxFragmentFactory: flags["jsx-fragment-factory"],
