@@ -36,7 +36,7 @@ export interface ServeSpaOptions {
   /**
    * Rewrites URL paths to FS paths.
    *
-   * All paths must begin with `/`, otherwise they won't match.
+   * All URL paths must begin with `/`, otherwise they won't match.
    *
    * If a URL path ends with `*` then only the path prefix is matched
    * and the remaining URL is appended to the FS path.
@@ -179,11 +179,11 @@ async function serveSpaFile(
             join(options.fsRoot ?? ".", options.importMapFile),
           ),
         );
-        const { imports } = importMap;
+        const { imports, scopes } = importMap;
         fileContent = fileContent.replace(
           "<head>",
           `<head>\n<script type="importmap">\n${
-            JSON.stringify({ imports }, null, 2)
+            JSON.stringify({ imports, scopes }, null, 2)
           }\n</script>`,
         );
         return new Response(fileContent, {
