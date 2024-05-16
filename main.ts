@@ -60,7 +60,11 @@ ${bold(`OPTIONS`)}
 `;
 
 if (import.meta.main) {
-  const flags = parse(Deno.args, {
+  await runServeSpa(Deno.args);
+}
+
+export async function runServeSpa(args: string[]) {
+  const flags = parse(args, {
     boolean: [
       "help",
       "cors",
@@ -89,7 +93,7 @@ if (import.meta.main) {
     console.log(helpText);
   } else {
     const port = Number(flags.port) || 8123;
-    const fsRoot = flags._[0] ? String(flags._[0]) : undefined;
+    const fsRoot = flags._[0] != null ? String(flags._[0]) : undefined;
 
     const options: ServeSpaOptions = {
       fsRoot,
