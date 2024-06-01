@@ -1,7 +1,7 @@
 import { serveSpa, ServeSpaOptions } from "./mod.ts";
-import { join } from "https://deno.land/std@0.203.0/path/join.ts";
-import { assertMatch } from "https://deno.land/std@0.203.0/assert/assert_match.ts";
-import { assertEquals } from "https://deno.land/std@0.203.0/assert/assert_equals.ts";
+import { join } from "https://deno.land/std@0.224.0/path/join.ts";
+import { assertMatch } from "https://deno.land/std@0.224.0/assert/assert_match.ts";
+import { assertEquals } from "https://deno.land/std@0.224.0/assert/assert_equals.ts";
 
 function startServer(options?: ServeSpaOptions) {
   return Deno.serve((request) =>
