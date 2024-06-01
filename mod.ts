@@ -1,6 +1,6 @@
-import { extname } from "https://deno.land/std@0.203.0/path/extname.ts";
-import { join } from "https://deno.land/std@0.203.0/path/join.ts";
-import { serveFile } from "https://deno.land/std@0.202.0/http/file_server.ts";
+import { extname } from "https://deno.land/std@0.224.0/path/extname.ts";
+import { join } from "https://deno.land/std@0.224.0/path/join.ts";
+import { serveFile } from "https://deno.land/std@0.224.0/http/file_server.ts";
 import { transform } from "https://deno.land/x/swc@0.2.1/mod.ts";
 
 export interface ServeSpaOptions {

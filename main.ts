@@ -1,5 +1,5 @@
-import { parse } from "https://deno.land/std@0.203.0/flags/mod.ts";
-import { bold, underline } from "https://deno.land/std@0.222.1/fmt/colors.ts";
+import { parse } from "https://deno.land/std@0.224.0/flags/mod.ts";
+import { bold, underline } from "https://deno.land/std@0.224.0/fmt/colors.ts";
 import { serveSpa, ServeSpaOptions } from "./mod.ts";
 
 // deno-fmt-ignore
